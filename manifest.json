@@ -3,11 +3,12 @@
     "name": "Highlive",
     "description": "Highlights raw source code files you view on the web",
     "version": "0.1",
-    "content_scripts": [
-    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
     "permissions": [
         "webRequest",
-        "*://*/",
+        "<all_urls>",
         "tabs"
     ]
 }
