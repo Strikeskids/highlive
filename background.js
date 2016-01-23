@@ -1,21 +1,16 @@
-chrome.webRequest.onResponseStarted.addListener(handlePageLoad,
-    {
-        types: ['main_frame', 'sub_frame'],
-        urls: ['<all_urls>']
-    },
-    ['responseHeaders']
-)
+var contextMenuId = 'highlight-menu'
 
-function handlePageLoad(details) {
-    var contentType = getContentType(details)
-    if (contentType.startsWith('text/plain')) {
-        // Perform language detection
-        // Perform syntax highlighting
-    }
+chrome.runtime.onInstalled.addListener(setup)
+
+function setup() {
+    chrome.contextMenus.create({
+        id: contextMenuId,
+        title: "Highlight Text",
+    })
+    chrome.contextMenus.onClicked.addListener(contextClicked)
 }
 
-function getContentType(details) {
-    if (!details || !details.responseHeaders) return
-    var header = details.responseHeaders.find(header => header.name.toLowerCase() === 'content-type')
-    return header && header.value
+function contextClicked(info, tab) {
+    if (info.menuItemId !== contextMenuId) return
+    chrome.tabs.executeScript(tab.tabId, {file: 'highlighter.js'})
 }
