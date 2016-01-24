@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Highlive",
-    "description": "Highlights raw source code files you view on the web",
+    "description": "Highlights raw source code files you view on the web.",
     "version": "0.1",
     "background": {
         "scripts": ["background.js"],

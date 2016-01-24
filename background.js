@@ -1,6 +1,8 @@
 var contextMenuId = 'highlight-menu'
 
 chrome.runtime.onInstalled.addListener(setup)
+setTimeout(checkSetup, 300)
+setupListeners()
 
 function setup() {
     chrome.contextMenus.create({
@@ -8,11 +10,23 @@ function setup() {
         title: "Highlight Text",
         contexts: ['all'],
     })
+}
 
-    chrome.contextMenus.onClicked.addListener(function(info, tab) {
-        if (info.menuItemId !== contextMenuId) return
-        chrome.tabs.insertCSS(tab.tabId, {file: 'vendor/highlight/styles/default.css'})
-        chrome.tabs.executeScript(tab.tabId, {file: 'vendor/highlight/highlight.pack.js'})
-        chrome.tabs.executeScript(tab.tabId, {file: 'highlighter.js'})
+function checkSetup() {
+    chrome.contextMenus.update(contextMenuId, {}, function() {
+        if (chrome.runtime.lastError) {
+            setup()
+        }
     })
+}
+
+function setupListeners() {
+    chrome.contextMenus.onClicked.addListener(menuClicked)
+}
+
+function menuClicked(info, tab) {
+    if (info.menuItemId !== contextMenuId) return
+    chrome.tabs.insertCSS(tab.tabId, {file: 'vendor/highlight/styles/default.css'})
+    chrome.tabs.executeScript(tab.tabId, {file: 'vendor/highlight/highlight.pack.js'})
+    chrome.tabs.executeScript(tab.tabId, {file: 'highlighter.js'})
 }
