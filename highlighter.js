@@ -16,12 +16,8 @@ function runHighlight(node) {
 
     var result = hljs.highlightAuto(text)
 
-    node.innerHTML = result.value
-    if (!hasCodeNode(node)) {
-        wrapInCode(node)
-    }
+    node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
     
-    node.className = buildClassName(oldClassName, result.language)
     node.style.cssText += 'position: relative;'
     addLanguageNode(node, result.language)
 }
@@ -53,27 +49,10 @@ function addLanguageNode(node, language) {
     node.appendChild(menu)
 }
 
-function hasCodeNode(node) {
-    if (node.firstChild.nodeType !== Node.TEXT_NODE) return true
-    while (node) {
-        if (node.nodeName.toLowerCase() === 'code') return true
-        node = node.parentElement
-    }
-    return false
-}
-
-function wrapInCode(node) {
-    var code = document.createElement('code')
-    while (node.firstChild) {
-        code.appendChild(node.firstChild)
-    }
-    node.appendChild(code)
-}
-
 function canHighlight(node) {
     if (!node || !node.firstChild || !node.tagName) return false
     var tagName = node.nodeName.toLowerCase()
-    return (tagName === 'code' || tagName === 'pre')
+    return (tagName === 'pre')
         && !isHighlighted(node) && !canHighlight(node.parentElement)
 }
 
