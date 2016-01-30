@@ -17,20 +17,47 @@ function runHighlight(node) {
     var result = hljs.highlightAuto(text)
 
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
-    
     node.style.cssText += 'position: relative;'
-    addLanguageNode(node, result.language)
+    node.appendChild(languageInfoNode(result.language))
 }
 
-function buildClassName(className, language) {
-    var result = className
-    if (!result.match(/\bhljs\b/)) {
-        result += ' hljs'
-    }
-    if (result.indexOf(language) === -1) {
-        result += ' ' + language
-    }
-    return result
+function languageInfoNode(currentSelected) {
+    var languages = hljs.listLanguages()
+    var languageOptions = languages.map((language) => `
+            <option value="${language}"
+                    ${currentSelected === language ? 'selected' : ''}>
+                ${language}
+            </option>
+        `)
+
+    var wrapper = document.createElement('div')
+    wrapper.style.cssText = `
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-family: initial;
+            white-space: initial;
+            background-color: #f0fff0;
+            padding: 5px;
+            border-bottom-left-radius: 5px;
+        `
+    wrapper.innerHTML = `
+            <select class="highlight-language">
+                ${languageOptions.join('\n')}
+            </select>
+        `
+
+    var select = wrapper.querySelector('select.highlight-language')
+
+    select.addEventListener('change', (e) => {
+            var main = wrapper.parentElement
+            var code = main.querySelector('.hljs')
+            if (code) {
+                code.innerHTML = hljs.highlight(select.value, code.textContent, true).value
+            }
+        })
+
+    return wrapper
 }
 
 function addLanguageNode(node, language) {
