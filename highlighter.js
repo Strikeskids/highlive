@@ -14,19 +14,48 @@ function runHighlight(node) {
     var text = node.textContent
     var oldClassName = node.className
 
-    var result = hljs.highlightAuto(text)
+    var analysis = analyzeText(text)
+    var result = analysis.best
 
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
     node.style.cssText += 'position: relative;'
-    node.appendChild(languageInfoNode(result.language))
+    node.appendChild(languageInfoNode(analysis))
 }
 
-function languageInfoNode(currentSelected) {
-    var languages = hljs.listLanguages()
-    var languageOptions = languages.map((language) => `
-            <option value="${language}"
-                    ${currentSelected === language ? 'selected' : ''}>
-                ${language}
+function analyzeText(text, languages) {
+    var best = {
+        language: '',
+        relevance: 0,
+        value: text,
+    }
+    languages = languages || hljs.listLanguages()
+    var data = languages.map((language) => {
+        var info = hljs.highlight(language, text, false)
+        info.language = language
+        if (info.r > best.relevance) {
+            best = {
+                language: info.language,
+                value: info.value,
+                relevance: info.r,
+            }
+        }
+        return {
+            language: info.language,
+            relevance: info.r
+        }
+    })
+    return {
+        data: data,
+        best: best,
+    }
+}
+
+function languageInfoNode(analysis) {
+    var currentSelected = analysis.best.language
+    var languageOptions = analysis.data.map((cur) => `
+            <option value="${cur.language}"
+                    ${currentSelected === cur.language ? 'selected' : ''}>
+                ${cur.language}: ${cur.relevance}
             </option>
         `)
 
