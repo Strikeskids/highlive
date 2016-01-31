@@ -44,6 +44,7 @@ function analyzeText(text, languages) {
             relevance: info.r
         }
     })
+    data.sort((a, b) => b.relevance - a.relevance)
     return {
         data: data,
         best: best,
