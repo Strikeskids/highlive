@@ -7,7 +7,7 @@ setupListeners()
 function setup() {
     chrome.contextMenus.create({
         id: contextMenuId,
-        title: "Highlight Text",
+        title: "Highlight Code",
         contexts: ['all'],
     })
 }
