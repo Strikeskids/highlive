@@ -1,0 +1,46 @@
+.hljs {
+    position: relative;
+}
+
+.hl-language {
+    display: none;
+
+    background-color: #e0ffe0;
+    padding: 5px;
+    margin: 2px;
+    flex: 1 0 auto;
+    cursor: pointer;
+}
+
+.hl-language.hl-selected {
+    display: block;
+}
+
+.hl-language-choice:hover > .hl-language {
+    display: block;
+}
+
+.hl-language-choice:hover > .hl-language.hl-selected {
+    background-color: #ffe0e0;
+}
+
+.hl-language:hover {
+    background-color: #d0ffd0;
+}
+
+.hl-language-choice {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-family: initial;
+    white-space: initial;
+    background-color: #f0fff0;
+    border-bottom-left-radius: 5px;
+    display: flex;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: space-between;
+    flex-flow: row-reverse wrap;
+    max-height: 100%;
+    padding: 5px;
+}
