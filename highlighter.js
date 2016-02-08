@@ -18,7 +18,6 @@ function runHighlight(node) {
     var result = analysis.best
 
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
-    node.style.cssText += 'position: relative;'
     node.appendChild(languageInfoNode(analysis))
 }
 
@@ -54,56 +53,35 @@ function analyzeText(text, languages) {
 function languageInfoNode(analysis) {
     var currentSelected = analysis.best.language
     var languageOptions = analysis.data.map((cur) => `
-            <option value="${cur.language}"
-                    ${currentSelected === cur.language ? 'selected' : ''}>
+            <div data-language="${cur.language}" class="hl-language">
                 ${cur.language}: ${cur.relevance}
-            </option>
+            </div>
         `)
 
     var wrapper = document.createElement('div')
-    wrapper.style.cssText = `
-            position: absolute;
-            right: 0;
-            top: 0;
-            font-family: initial;
-            white-space: initial;
-            background-color: #f0fff0;
-            padding: 5px;
-            border-bottom-left-radius: 5px;
-        `
-    wrapper.innerHTML = `
-            <select class="highlight-language">
-                ${languageOptions.join('\n')}
-            </select>
-        `
+    wrapper.className = 'hl-language-choice'
+    wrapper.innerHTML = languageOptions.join('\n')
 
-    var select = wrapper.querySelector('select.highlight-language')
-
-    select.addEventListener('change', (e) => {
-            var main = wrapper.parentElement
-            var code = main.querySelector('.hljs')
-            if (code) {
-                code.innerHTML = hljs.highlight(select.value, code.textContent, true).value
-            }
-        })
+    var buttons = wrapper.querySelectorAll('.hl-language')
+    Array.prototype.forEach.call(buttons, function(b) {
+        if (b.dataset.language === currentSelected) {
+            b.classList.add('hl-selected')
+        }
+        b.addEventListener('click', languageClicked)
+    })
 
     return wrapper
-}
 
-function addLanguageNode(node, language) {
-    var menu = document.createElement('div')
-    menu.style.cssText = (
-            'position: absolute;' +
-            'right: 0;' +
-            'top: 0;' +
-            'font-family: initial;' +
-            'white-space: initial;' +
-            'background-color: #f0fff0;' + 
-            'padding: 5px;' +
-            'border-bottom-left-radius: 5px;'
-        )
-    menu.innerText = language
-    node.appendChild(menu)
+    function languageClicked(e) {
+        var language = e.target.dataset.language
+        var main = wrapper.parentElement
+        var code = main.querySelector('.hljs')
+        if (code && language) {
+            wrapper.querySelector('.hl-selected').classList.remove('hl-selected')
+            e.target.classList.add('hl-selected')
+            code.innerHTML = hljs.highlight(language, code.textContent, true).value
+        }
+    }
 }
 
 function canHighlight(node) {
