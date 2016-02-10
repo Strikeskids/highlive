@@ -1,7 +1,3 @@
-.hljs {
-    position: relative;
-}
-
 .hl-language {
     display: none;
 
@@ -16,11 +12,11 @@
     display: block;
 }
 
-.hl-language-choice:hover > .hl-language {
+.hl-language-choice.hl-active > .hl-language {
     display: block;
 }
 
-.hl-language-choice:hover > .hl-language.hl-selected {
+.hl-language-choice.hl-active > .hl-language.hl-selected {
     background-color: #ffe0e0;
 }
 

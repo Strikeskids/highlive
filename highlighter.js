@@ -19,6 +19,7 @@ function runHighlight(node) {
 
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
     node.appendChild(languageInfoNode(analysis))
+    node.style.cssText += 'position: relative;'
 }
 
 function analyzeText(text, languages) {
@@ -67,19 +68,24 @@ function languageInfoNode(analysis) {
         if (b.dataset.language === currentSelected) {
             b.classList.add('hl-selected')
         }
-        b.addEventListener('click', languageClicked)
     })
+    wrapper.addEventListener('click', containerClicked)
 
     return wrapper
 
-    function languageClicked(e) {
-        var language = e.target.dataset.language
-        var main = wrapper.parentElement
-        var code = main.querySelector('.hljs')
-        if (code && language) {
-            wrapper.querySelector('.hl-selected').classList.remove('hl-selected')
-            e.target.classList.add('hl-selected')
-            code.innerHTML = hljs.highlight(language, code.textContent, true).value
+    function containerClicked(e) {
+        if (wrapper.classList.contains('hl-active')) {
+            var target = e.target
+            var language = target.dataset.language
+            var code = wrapper.parentElement.querySelector('.hljs')
+            if (code && language && !target.classList.contains('hl-selected')) {
+                wrapper.querySelector('.hl-selected').classList.remove('hl-selected')
+                e.target.classList.add('hl-selected')
+                code.innerHTML = hljs.highlight(language, code.textContent, true).value
+            }
+            wrapper.classList.remove('hl-active')
+        } else {
+            wrapper.classList.add('hl-active')
         }
     }
 }
