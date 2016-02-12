@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 .hl-language {
     display: none;
 
@@ -17,11 +21,11 @@
 }
 
 .hl-language-choice.hl-active > .hl-language.hl-selected {
-    background-color: #ffe0e0;
+    background-color: #ffe0e0 !important;
 }
 
 .hl-language:hover {
-    background-color: #d0ffd0;
+    background-color: #90ee90 !important;
 }
 
 .hl-language-choice {

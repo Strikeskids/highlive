@@ -51,11 +51,21 @@ function analyzeText(text, languages) {
     }
 }
 
+function relevanceColor(current, max) {
+    var ratio = (current / max)
+    var lightness = 94 - 25 * ratio * ratio
+    return `hsl(120, 100%, ${lightness}%)`
+}
+
 function languageInfoNode(analysis) {
     var currentSelected = analysis.best.language
+    var maxRelevance = Math.max(...analysis.data.map(cur => cur.relevance))
+    console.log(maxRelevance)
     var languageOptions = analysis.data.map((cur) => `
-            <div data-language="${cur.language}" class="hl-language">
-                ${cur.language}: ${cur.relevance}
+            <div data-language="${cur.language}"
+                style="background-color: ${relevanceColor(cur.relevance, maxRelevance)}"
+                class="hl-language">
+                ${cur.language}
             </div>
         `)
 
