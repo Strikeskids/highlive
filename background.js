@@ -26,7 +26,7 @@ function setupListeners() {
 
 function menuClicked(info, tab) {
     if (info.menuItemId !== contextMenuId) return
-    chrome.tabs.insertCSS(tab.tabId, {file: 'vendor/highlight/styles/default.css'})
+    chrome.tabs.insertCSS(tab.tabId, {file: 'vendor/highlight/styles/sunburst.css'})
     chrome.tabs.insertCSS(tab.tabId, {file: 'style.css'})
     chrome.tabs.executeScript(tab.tabId, {file: 'vendor/highlight/highlight.pack.js'})
     chrome.tabs.executeScript(tab.tabId, {file: 'highlighter.js'})
