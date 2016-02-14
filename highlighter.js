@@ -67,7 +67,7 @@ function languageInfoNode(analysis) {
                 class="hl-language">
                 ${cur.language}
             </div>
-        `)
+        `.trim())
 
     var wrapper = document.createElement('div')
     wrapper.className = 'hl-language-choice'
