@@ -19,7 +19,7 @@ function runHighlight(node) {
 
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
     node.appendChild(languageInfoNode(analysis))
-    node.style.cssText += 'position: relative;'
+    node.style.cssText += 'position: relative; margin: 0;'
 }
 
 function analyzeText(text, languages) {
@@ -60,7 +60,6 @@ function relevanceColor(current, max) {
 function languageInfoNode(analysis) {
     var currentSelected = analysis.best.language
     var maxRelevance = Math.max(...analysis.data.map(cur => cur.relevance))
-    console.log(maxRelevance)
     var languageOptions = analysis.data.map((cur) => `
             <div data-language="${cur.language}"
                 style="background-color: ${relevanceColor(cur.relevance, maxRelevance)}"
@@ -80,8 +79,16 @@ function languageInfoNode(analysis) {
         }
     })
     wrapper.addEventListener('click', containerClicked)
+    document.body.addEventListener('keydown', keydown)
 
     return wrapper
+
+    function keydown(e) {
+        var code = e.which || e.keyCode
+        if (code === 27) {
+            wrapper.className = wrapper.className.replace('hl-active', '')
+        }
+    }
 
     function containerClicked(e) {
         if (wrapper.classList.contains('hl-active')) {
