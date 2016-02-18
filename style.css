@@ -10,6 +10,7 @@ body {
     margin: 2px;
     flex: 1 0 auto;
     cursor: pointer;
+    text-align: center;
 }
 
 .hl-language.hl-selected {
@@ -21,7 +22,8 @@ body {
 }
 
 .hl-language-choice.hl-active > .hl-language.hl-selected {
-    background-color: #ffe0e0 !important;
+    border: solid 3px #ffe0e0;
+    padding: 2px;
 }
 
 .hl-language:hover {
