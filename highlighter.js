@@ -20,6 +20,14 @@ function runHighlight(node) {
     node.innerHTML = `<code class="hljs ${result.language}">${result.value}</code>`
     node.appendChild(languageInfoNode(analysis))
     node.style.cssText += 'position: relative; margin: 0;'
+
+    var computedBodyStyle = getComputedStyle(document.body)
+    var computedHljsStyle = getComputedStyle(node.firstChild)
+
+    if (computedBodyStyle['background-color'] === 'rgba(0, 0, 0, 0)') {
+        // Make body color hljs color if transparent
+        document.body.style.backgroundColor = computedHljsStyle['background-color']
+    }
 }
 
 function analyzeText(text, languages) {
